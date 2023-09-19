@@ -7,7 +7,7 @@ public class Node : MonoBehaviour
 {
     private Image image;
 
-    public NodeInfo nodeInfo;
+    public NodeBase nodeBase;
     public float maxDistance;
     private float moveDistance;
     private Transform parent;
@@ -16,7 +16,7 @@ public class Node : MonoBehaviour
     private void Start()
     {
         image = GetComponent<Image>();
-        image.color = nodeInfo.color;
+        image.color = nodeBase.color;
     }
 
     public void Change(Node node)

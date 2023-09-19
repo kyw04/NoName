@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NodeInfo", menuName = "Tools/NodeInfo")]
-public class NodeInfo : ScriptableObject
+[CreateAssetMenu(fileName = "NodeBase", menuName = "Tools/NodeBase")]
+public class NodeBase : ScriptableObject
 {
     public enum Type
     {
