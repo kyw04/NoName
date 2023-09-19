@@ -4,15 +4,44 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public enum Type
     {
-        
+        None,
+        Red,
+        Blue,
+        White,
+        Green,
+        Black
+    }
+    public enum State
+    { 
+        Idle,
+        Hold
     }
 
-    // Update is called once per frame
-    void Update()
+    public Type type;
+    public State state;
+
+    public int x, y;
+    public RectTransform rectTransform;
+
+    private void Start()
     {
-        
+        rectTransform = GetComponent<RectTransform>();
+    }
+
+    public void Change(Vector2 movePos)
+    {
+
+    }
+
+    public void Hold()
+    {
+        Debug.Log($"hold {x}, {y}");
+    }
+
+    public void Put()
+    {
+        Debug.Log($"put {x}, {y}");
     }
 }
