@@ -21,8 +21,9 @@ public class Puzzle : MonoBehaviour
         for (int i = 0, j = 0; i < pos.Length; i++)
         {
             Node newNode = Instantiate(nodePrefab, pos[i]).GetComponent<Node>();
+            newNode.puzzle = this;
             newNode.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
-            newNode.Set(i % 5, j % 5, pos[i]);
+            newNode.Set(i % 5, j % 5);
             j = (i + 1) % 5 == 0 ? j + 1 : j;
             nodes.Add(newNode);
         }
