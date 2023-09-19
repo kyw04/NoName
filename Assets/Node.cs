@@ -1,47 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Node : MonoBehaviour
 {
-    public enum Type
-    {
-        None,
-        Red,
-        Blue,
-        White,
-        Green,
-        Black
-    }
-    public enum State
-    { 
-        Idle,
-        Hold
-    }
+    private Image image;
 
-    public Type type;
-    public State state;
-
-    public int x, y;
-    public RectTransform rectTransform;
+    public NodeInfo nodeInfo;
+    public float maxDistance;
+    private float moveDistance;
+    private Transform parent;
+    private int x, y;
 
     private void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
+        image = GetComponent<Image>();
+        image.color = nodeInfo.color;
     }
 
-    public void Change(Vector2 movePos)
+    public void Change(Node node)
     {
+        Node temp = new Node();
+        temp.Set(x, y, parent);
 
+        this.Set(node.x, node.y, node.parent);
+        node.Set(temp.x, temp.y, temp.parent);
+    }
+    public void Set(int _x, int _y, Transform _parent)
+    {
+        x = _x;
+        y = _y;
+        parent = _parent;
     }
 
     public void Hold()
     {
-        Debug.Log($"hold {x}, {y}");
+        Vector3 moveDirection = Input.mousePosition - parent.position;
+        moveDistance = Vector3.Distance(Input.mousePosition, parent.position);
+        moveDistance = maxDistance < moveDistance ? maxDistance : moveDistance;
+        transform.position = moveDirection.normalized * moveDistance + parent.position;
     }
 
     public void Put()
     {
-        Debug.Log($"put {x}, {y}");
+        if (moveDistance > maxDistance * 0.5f)
+        {
+            Debug.Log("change");
+        }
+        transform.position = parent.position;
     }
 }

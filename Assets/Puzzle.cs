@@ -2,11 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ i:  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14
+ x:  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  2,  2,  2,  2,  2
+ y:  0,  1,  2,  3,  4,  0,  1,  2,  3,  4,  0,  1,  2,  3,  4
+*/
+
 public class Puzzle : MonoBehaviour
 {
     public Transform[] pos;
     public GameObject nodePrefab;
     public Transform nodeParent;
+    public NodeInfo[] nodeInfos;
     public List<Node> nodes = new List<Node>();
 
     private void Start()
@@ -14,10 +21,9 @@ public class Puzzle : MonoBehaviour
         for (int i = 0, j = 0; i < pos.Length; i++)
         {
             Node newNode = Instantiate(nodePrefab, pos[i]).GetComponent<Node>();
-            newNode.x = i % 5;
-            newNode.y = j % 5;
-            j = i % 5 == 0 ? j : j + 1;
-
+            newNode.nodeInfo = nodeInfos[Random.Range(0, nodeInfos.Length)];
+            newNode.Set(i % 5, j % 5, pos[i]);
+            j = (i + 1) % 5 == 0 ? j + 1 : j;
             nodes.Add(newNode);
         }
     }
