@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
  i:  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14
@@ -10,14 +11,21 @@ using UnityEngine;
 
 public class Puzzle : MonoBehaviour
 {
+    public GameObject[] countImg;
     public Transform[] pos;
     public GameObject nodePrefab;
     public Transform nodeParent;
     public NodeBase[] nodeInfos;
     public List<Node> nodes = new List<Node>();
+    public int changeCount = 3;
 
     private void Start()
     {
+        foreach (GameObject img in countImg)
+        {
+            img.SetActive(true);
+        }
+
         for (int i = 0, j = 0; i < pos.Length; i++)
         {
             Node newNode = Instantiate(nodePrefab, pos[i]).GetComponent<Node>();
@@ -27,6 +35,15 @@ public class Puzzle : MonoBehaviour
             j = (i + 1) % 5 == 0 ? j + 1 : j;
             nodes.Add(newNode);
         }
+    }
+
+    public void UseCount()
+    {
+        if (changeCount <= 0)
+            return;
+
+        changeCount--;
+        countImg[changeCount].SetActive(false);
     }
 
     public void NodeDelete(int x, int y)

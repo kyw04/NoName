@@ -96,9 +96,9 @@ public class Node : MonoBehaviour
     public void Put()
     {
         gameObject.layer = LayerMask.NameToLayer("UI");
-        if (moveDistance > maxDistance * 0.5f)
+        if (moveDistance > maxDistance * 0.5f && puzzle.changeCount > 0)
         {
-            Debug.Log("change");
+            puzzle.UseCount();
             Change(target);
         }
         else if (target)
