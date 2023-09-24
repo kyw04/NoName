@@ -21,13 +21,11 @@ public class Node : MonoBehaviour
 
     public void Change(Node node)
     {
-        int tempX = x, tempY = y;
-        Transform parent = transform.parent;
-
-        this.Set(node.x, node.y);
-        node.Set(tempX, tempY);
-        transform.SetParent(target.transform.parent);
-        target.transform.SetParent(parent);
+        NodeBase temp = this.nodeBase;
+        this.nodeBase = node.nodeBase;
+        node.nodeBase = temp;
+        this.image.color = nodeBase.color;
+        node.image.color = node.nodeBase.color;
     }
     public void Set(int _x, int _y)
     {
@@ -80,7 +78,7 @@ public class Node : MonoBehaviour
 
                         target = puzzle.pos[index].GetComponentInChildren<Node>();
                         target.transform.position = transform.parent.position;
-                        Debug.Log($"{newX}, {newY}");
+                        //Debug.Log($"{newX}, {newY}");
                     }
                 }
             }
@@ -101,7 +99,8 @@ public class Node : MonoBehaviour
             puzzle.UseCount();
             Change(target);
         }
-        else if (target)
+        
+        if (target)
         {
             target.transform.position = target.transform.parent.position;
         }
