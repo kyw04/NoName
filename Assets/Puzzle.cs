@@ -14,10 +14,25 @@ public class Puzzle : MonoBehaviour
     public GameObject[] countImg;
     public Transform[] pos;
     public GameObject nodePrefab;
-    public Transform nodeParent;
     public NodeBase[] nodeInfos;
     public List<Node> nodes = new List<Node>();
     public int changeCount = 3;
+    public Pattern[] patterns;
+
+    private void Awake()
+    {
+        // no changed in Inspector. i'll handle it here.
+        foreach (Pattern pattern in patterns)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    pattern.nodePattern[i, j] = pattern.inspectorShowPattern[i].index[j];
+                }
+            }
+        }
+    }
 
     private void Start()
     {
