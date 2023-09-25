@@ -28,7 +28,10 @@ public class Puzzle : MonoBehaviour
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    pattern.nodePattern[i, j] = pattern.inspectorShowPattern[i].index[j];
+                    if (pattern.inspectorShowPattern[i].index[j])
+                        pattern.nodePattern[i, j] = pattern.inspectorShowPattern[i].index[j].type;
+                    else
+                        pattern.nodePattern[i, j] = NodeType.None;
                 }
             }
         }

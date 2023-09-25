@@ -13,6 +13,16 @@ MonoBehaviour:
   m_Name: NodePattern 1
   m_EditorClassIdentifier: 
   inspectorShowPattern:
-  - index: 000000000000000000000000
-  - index: 000000000000000000000000
-  - index: 000000000000000000000000
+  - index:
+    - {fileID: 11400000, guid: bd9ad8161a388d44788313775857d052, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+  - index:
+    - {fileID: 11400000, guid: 57d6646ad0e26a34eab4e1921cf8f902, type: 2}
+    - {fileID: 11400000, guid: 57d6646ad0e26a34eab4e1921cf8f902, type: 2}
+    - {fileID: 0}
+  - index:
+    - {fileID: 11400000, guid: 57d6646ad0e26a34eab4e1921cf8f902, type: 2}
+    - {fileID: 0}
+    - {fileID: 0}
+  damage: 0

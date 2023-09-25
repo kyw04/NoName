@@ -12,3 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4799b1dfbd296bf458475aa19279a27d, type: 3}
   m_Name: NodePattern 2
   m_EditorClassIdentifier: 
+  inspectorShowPattern:
+  - index:
+    - {fileID: 11400000, guid: 1a903c2e6fc4772498bf0fb5189a5bc9, type: 2}
+    - {fileID: 11400000, guid: bd9ad8161a388d44788313775857d052, type: 2}
+    - {fileID: 11400000, guid: 3bb3abd5dbd2186429522696bb9057cf, type: 2}
+  - index:
+    - {fileID: 0}
+    - {fileID: 11400000, guid: 57d6646ad0e26a34eab4e1921cf8f902, type: 2}
+    - {fileID: 0}
+  - index:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+  damage: 0
