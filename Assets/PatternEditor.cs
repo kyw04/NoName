@@ -15,7 +15,7 @@ public class PatternEditor : Editor
     {
         base.OnInspectorGUI();
 
-        EditorGUILayout.LabelField("Node Pattern");
+        EditorGUILayout.LabelField("Pattern");
         for (int i = 0; i < 3; i++)
         {
             EditorGUILayout.BeginHorizontal();

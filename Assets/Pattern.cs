@@ -16,5 +16,5 @@ public class Pattern : ScriptableObject
     public NodePattern[] inspectorShowPattern = new NodePattern[3];
     public NodeType[,] nodePattern = new NodeType[3, 3];
 
-   
+    public int damage;
 }

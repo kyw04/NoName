@@ -61,6 +61,43 @@ public class Puzzle : MonoBehaviour
         countImg[changeCount].SetActive(false);
     }
 
+    public void TurnEnd()
+    {
+        foreach (Pattern pattern in patterns)
+        {
+            for (int i = 1; i < 4; i++)
+            {
+                for (int j = 1; j < 4; j++)
+                {
+                    if (PatternCheck(pattern, i, j))
+                        Debug.Log("true");
+                }
+            }
+        }
+    }
+
+    public bool PatternCheck(Pattern pattern, int x, int y)
+    {
+        int[] dir = { -1, 0, 1 };
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (pattern.nodePattern[i, j] == NodeType.None)
+                    continue;
+
+                int newX = x + dir[i];
+                int newY = y + dir[j];
+                int index = newX * 5 + newY;
+                if (pattern.nodePattern[i, j] != nodes[index].nodeBase.type)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
     public void NodeDelete(int x, int y)
     {
 
