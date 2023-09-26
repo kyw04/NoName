@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,11 +16,13 @@ public class Puzzle : MonoBehaviour
 {
     public GameObject[] countImg;
     public Transform[] pos;
-    public GameObject nodePrefab;
+    public Node nodeDefault;
     public NodeBase[] nodeInfos;
     public List<Node> nodes = new List<Node>();
     public int changeCount = 3;
     public Pattern[] patterns;
+    public Enemy enemy;
+
 
     private void Awake()
     {
@@ -39,19 +44,25 @@ public class Puzzle : MonoBehaviour
 
     private void Start()
     {
-        foreach (GameObject img in countImg)
-        {
-            img.SetActive(true);
-        }
+        ResetCount();
 
         for (int i = 0, j = 0; i < pos.Length; i++)
         {
-            Node newNode = Instantiate(nodePrefab, pos[i]).GetComponent<Node>();
-            newNode.puzzle = this;
+            Node newNode = Instantiate(nodeDefault, pos[i]);
+            newNode.puzzle= this;
             newNode.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
-            newNode.Set(i % 5, j % 5);
+            newNode.SetIndex(i % 5, j % 5);
             j = (i + 1) % 5 == 0 ? j + 1 : j;
             nodes.Add(newNode);
+        }
+    }
+
+    private void ResetCount()
+    {
+        changeCount = 3;
+        foreach (GameObject img in countImg)
+        {
+            img.SetActive(true);
         }
     }
 
@@ -66,22 +77,32 @@ public class Puzzle : MonoBehaviour
 
     public void TurnEnd()
     {
+        HashSet<Node> deleteNodes = new HashSet<Node>();
+
         foreach (Pattern pattern in patterns)
         {
             for (int i = 1; i < 4; i++)
             {
                 for (int j = 1; j < 4; j++)
                 {
-                    if (PatternCheck(pattern, i, j))
-                        Debug.Log("true");
+                    HashSet<Node> temp = PatternCheck(pattern, i, j);
+                    if (temp.Count() > 0)
+                    {
+                        deleteNodes.UnionWith(temp);
+                    }
                 }
             }
         }
+
+        NodeDelete(deleteNodes);
+
+        ResetCount();
     }
 
-    public bool PatternCheck(Pattern pattern, int x, int y)
+    public HashSet<Node> PatternCheck(Pattern pattern, int x, int y)
     {
         int[] dir = { -1, 0, 1 };
+        var deleteNode = new HashSet<Node>();
 
         for (int i = 0; i < 3; i++)
         {
@@ -93,22 +114,43 @@ public class Puzzle : MonoBehaviour
                 int newX = x + dir[i];
                 int newY = y + dir[j];
                 int index = newX * 5 + newY;
-                if (pattern.nodePattern[i, j] != nodes[index].nodeBase.type)
-                    return false;
+                if (pattern.nodePattern[i, j] == nodes[index].nodeBase.type)
+                {
+                    deleteNode.Add(nodes[index]);
+                }
+                else
+                {
+                    deleteNode.Clear();
+                    return deleteNode;
+                }
             }
         }
 
-        return true;
+        enemy.GetDamage(pattern.damage);
+        return deleteNode;
     }
 
-    public void NodeDelete(int x, int y)
+    public void NodeDelete(HashSet<Node> deleteNode)
     {
+        HashSet<int> index = new HashSet<int>();
+        foreach (Node node in deleteNode)
+        {
+            index.Add(node.x);
+            node.SetNode(nodeDefault);
+            node.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
+            node.image.color = node.nodeBase.color;
+            //Debug.Log(node.x + " " + node.y);
+        }
 
+        //foreach (int i in index)
+        //{
+        //    NodeDown(i, 5);
+        //}
     }
 
-    public void NodeDown(int x, int y, int cnt)
+    public void NodeDown(int x, int y)
     {
-        for (int i = y - cnt; i >= 0; i--)
+        for (int i = y; i >= 0; i--)
         {
             //nodes[x, i + 1] = nodes[x, i];
             Debug.Log($"{i + 1} <= {i}");

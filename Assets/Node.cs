@@ -1,3 +1,4 @@
+using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,14 @@ public class Node : MonoBehaviour
     public NodeBase nodeBase;
     public float maxDistance;
     private float moveDistance;
-    private Image image;
+    public Image image;
     public int x, y;
     private Node target = null;
 
     private void Start()
     {
-        image = GetComponent<Image>();
-        image.color = nodeBase.color;
+        if (nodeBase != null)
+            image.color = nodeBase.color;
     }
 
     public void Change(Node node)
@@ -27,7 +28,14 @@ public class Node : MonoBehaviour
         this.image.color = nodeBase.color;
         node.image.color = node.nodeBase.color;
     }
-    public void Set(int _x, int _y)
+
+    public void SetNode(Node node)
+    {
+        this.nodeBase = node.nodeBase;
+        this.image.color = node.image.color;
+    }
+
+    public void SetIndex(int _x, int _y)
     {
         x = _x;
         y = _y;

@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.008210657, g: 0.4811321, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -184,6 +184,7 @@ MonoBehaviour:
   puzzle: {fileID: 0}
   nodeBase: {fileID: 0}
   maxDistance: 75
+  image: {fileID: 8939055996878447857}
   x: 0
   y: 0
 --- !u!65 &7350047691604495055
