@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puzzle: {fileID: 0}
-  nodeBase: {fileID: 0}
+  nodeBase: {fileID: 11400000, guid: 5e7d514df53162e4aadcbd6d3307f109, type: 2}
   maxDistance: 75
   image: {fileID: 8939055996878447857}
   x: 0

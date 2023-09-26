@@ -49,7 +49,7 @@ public class Puzzle : MonoBehaviour
         for (int i = 0, j = 0; i < pos.Length; i++)
         {
             Node newNode = Instantiate(nodeDefault, pos[i]);
-            newNode.puzzle= this;
+            newNode.puzzle = this;
             newNode.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
             newNode.SetIndex(i % 5, j % 5);
             j = (i + 1) % 5 == 0 ? j + 1 : j;
@@ -137,24 +137,39 @@ public class Puzzle : MonoBehaviour
         {
             index.Add(node.x);
             node.SetNode(nodeDefault);
-            node.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
-            node.image.color = node.nodeBase.color;
+            //node.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
+            //node.image.color = node.nodeBase.color;
             //Debug.Log(node.x + " " + node.y);
         }
 
-        //foreach (int i in index)
-        //{
-        //    NodeDown(i, 5);
-        //}
+        foreach (int i in index)
+        {
+            //Debug.Log($"{i}, 4");
+            StartCoroutine(NodeDown(i, 4));
+        }
     }
 
-    public void NodeDown(int x, int y)
+    public IEnumerator NodeDown(int x, int y)
     {
-        for (int i = y; i >= 0; i--)
+        if (y >= 0)
         {
-            //nodes[x, i + 1] = nodes[x, i];
-            Debug.Log($"{i + 1} <= {i}");
+            if (nodes[x + y * 5].nodeBase.type == NodeType.None)
+            {
+                for (int i = y; i > 0; i--)
+                {
+                    while (i > 0 && nodes[x + (i - 1) * 5].nodeBase.type == NodeType.None) i--;
+                    yield return new WaitForSeconds(1f);
+                    nodes[x + i * 5].Change(nodes[x + (i - 1) * 5]);
+                }
+            }
+
+            StartCoroutine(NodeDown(x, y - 1));
         }
-        //nodes[x, 0] = change;
+        
+        if (y != 0 && nodes[x + y * 5].nodeBase.type == NodeType.None)
+        {
+            StartCoroutine(NodeDown(x, y));
+        }
+
     }
 }
