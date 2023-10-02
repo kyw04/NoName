@@ -35,6 +35,12 @@ public class Node : MonoBehaviour
         this.image.color = node.image.color;
     }
 
+    public void SetNode(NodeBase nodeBase)
+    {
+        this.nodeBase = nodeBase;
+        this.image.color = nodeBase.color;
+    }
+
     public void SetIndex(int _x, int _y)
     {
         x = _x;

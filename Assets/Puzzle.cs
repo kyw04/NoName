@@ -55,6 +55,11 @@ public class Puzzle : MonoBehaviour
             j = (i + 1) % 5 == 0 ? j + 1 : j;
             nodes.Add(newNode);
         }
+
+        for (int i = 0; i < 2; i++)
+        {
+            enemy.SetDeleteNodes(i, nodeInfos[Random.Range(0, nodeInfos.Length)], Random.Range(1, 3));
+        }
     }
 
     private void ResetCount()
@@ -144,7 +149,6 @@ public class Puzzle : MonoBehaviour
 
         foreach (int i in index)
         {
-            //Debug.Log($"{i}, 4");
             StartCoroutine(NodeDown(i, 4));
         }
     }
@@ -155,21 +159,25 @@ public class Puzzle : MonoBehaviour
         {
             if (nodes[x + y * 5].nodeBase.type == NodeType.None)
             {
-                for (int i = y; i > 0; i--)
+                int i = y;
+                for (; i >= 0; i--)
                 {
-                    while (i > 0 && nodes[x + (i - 1) * 5].nodeBase.type == NodeType.None) i--;
-                    yield return new WaitForSeconds(1f);
-                    nodes[x + i * 5].Change(nodes[x + (i - 1) * 5]);
+                    if (nodes[x + i * 5].nodeBase.type != NodeType.None)
+                    {
+                        yield return new WaitForSeconds(0.75f);
+                        nodes[x + i * 5].Change(nodes[x + y * 5]);
+                        break;
+                    }
+                }
+
+                if (i == -1)
+                {
+                    yield return new WaitForSeconds(0.75f);
+                    nodes[x + y * 5].SetNode(nodeInfos[Random.Range(0, nodeInfos.Length)]);
                 }
             }
 
             StartCoroutine(NodeDown(x, y - 1));
         }
-        
-        if (y != 0 && nodes[x + y * 5].nodeBase.type == NodeType.None)
-        {
-            StartCoroutine(NodeDown(x, y));
-        }
-
     }
 }
