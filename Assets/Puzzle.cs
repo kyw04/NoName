@@ -14,6 +14,15 @@ using UnityEngine.UI;
 
 public class Puzzle : MonoBehaviour
 {
+    public enum PuzzleState
+    { 
+        Idle,
+        Attack,
+        Waiting,
+        BoardModifi
+    }
+
+
     public GameObject[] countImg;
     public Transform[] pos;
     public Node nodeDefault;
@@ -22,7 +31,10 @@ public class Puzzle : MonoBehaviour
     public int changeCount = 3;
     public Pattern[] patterns;
     public Enemy enemy;
+    public Player player;
 
+    private int deleteCount;
+    public PuzzleState puzzleState;
 
     private void Awake()
     {
@@ -56,9 +68,33 @@ public class Puzzle : MonoBehaviour
             nodes.Add(newNode);
         }
 
+        bool[] selected = new bool[nodeInfos.Length];
         for (int i = 0; i < 2; i++)
         {
-            enemy.SetDeleteNodes(i, nodeInfos[Random.Range(0, nodeInfos.Length)], Random.Range(1, 3));
+            int index = Random.Range(0, nodeInfos.Length);
+            while (selected[index]) { index = Random.Range(0, nodeInfos.Length); }
+            selected[index] = true;
+
+            enemy.SetDeleteNodes(i, nodeInfos[index], Random.Range(1, 3));
+        }
+        enemy.puzzle = this;
+    }
+
+    private void Update()
+    {
+        if (deleteCount == 0)
+        {
+            deleteCount = -1;
+
+            if (puzzleState == PuzzleState.BoardModifi)
+            {
+                puzzleState = PuzzleState.Attack;
+                NodeDelete(enemy.Attack());
+            }
+            else
+            {
+                puzzleState = PuzzleState.Idle;
+            }
         }
     }
 
@@ -78,10 +114,18 @@ public class Puzzle : MonoBehaviour
 
         changeCount--;
         countImg[changeCount].SetActive(false);
+
+        if (changeCount == 0)
+            puzzleState = PuzzleState.Waiting;
     }
 
     public void TurnEnd()
     {
+        if (puzzleState != PuzzleState.Idle && puzzleState != PuzzleState.Waiting)
+            return;
+
+        puzzleState = PuzzleState.BoardModifi;
+
         HashSet<Node> deleteNodes = new HashSet<Node>();
 
         foreach (Pattern pattern in patterns)
@@ -100,7 +144,6 @@ public class Puzzle : MonoBehaviour
         }
 
         NodeDelete(deleteNodes);
-
         ResetCount();
     }
 
@@ -142,11 +185,9 @@ public class Puzzle : MonoBehaviour
         {
             index.Add(node.x);
             node.SetNode(nodeDefault);
-            //node.nodeBase = nodeInfos[Random.Range(0, nodeInfos.Length)];
-            //node.image.color = node.nodeBase.color;
-            //Debug.Log(node.x + " " + node.y);
         }
 
+        deleteCount = index.Count;
         foreach (int i in index)
         {
             StartCoroutine(NodeDown(i, 4));
@@ -155,7 +196,7 @@ public class Puzzle : MonoBehaviour
 
     public IEnumerator NodeDown(int x, int y)
     {
-        if (y >= 0)
+        while (y >= 0)
         {
             if (nodes[x + y * 5].nodeBase.type == NodeType.None)
             {
@@ -176,8 +217,10 @@ public class Puzzle : MonoBehaviour
                     nodes[x + y * 5].SetNode(nodeInfos[Random.Range(0, nodeInfos.Length)]);
                 }
             }
-
-            StartCoroutine(NodeDown(x, y - 1));
+            y--;
         }
+
+        yield return new WaitForSeconds(0.75f);
+        deleteCount--;
     }
 }

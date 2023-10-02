@@ -49,6 +49,9 @@ public class Node : MonoBehaviour
 
     public void Hold()
     {
+        if (puzzle.puzzleState != Puzzle.PuzzleState.Idle)
+            return;
+
         gameObject.layer = LayerMask.NameToLayer("Node");
         Vector3 moveDirection = Input.mousePosition - transform.parent.position;
         moveDistance = Vector3.Distance(Input.mousePosition, transform.parent.position);
