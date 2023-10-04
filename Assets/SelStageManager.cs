@@ -5,17 +5,24 @@ using UnityEngine;
 
 public class SelStageManager : MonoBehaviour
 {
+    
     public enum ConnectState
     {
         Connecting,
         End,
     }
+    public List<int> stageLevels = new List<int>(); 
+   
     public ConnectState state = ConnectState.End;
     public NodeLineConnector currentStage;
     public List<NodeLineConnector> Stages = new List<NodeLineConnector>();
     public LineRenderer linePrefab;
     public LineRenderer line;
     public float duration = 0.5f;
+    public Vector3 plusPos = new Vector3(0.5f, 0.5f, 0);
+
+    public bool isCreateDefalutLine = false;
+
 
 
     // Start is called before the first frame update
@@ -34,10 +41,10 @@ public class SelStageManager : MonoBehaviour
         NodeLineConnector parNode = currentStage;
         if (state != ConnectState.End) { Debug.Log("선이 동시에 생기지 않습니다."); return; }   
         state = ConnectState.Connecting;
-        if (!parNode.connectors.Contains(childNode)) { Debug.Log("해당 스테이지애 접근 할 수 없습니다. " + parNode.name + " to " + childNode.name);  return; }
+        if (!parNode.connectors.Contains(childNode)) { Debug.Log("해당 스테이지애 접근 할 수 없습니다. " + parNode.name + " to " + childNode.name); state = ConnectState.End; return; }
 
 
-        Vector3 plusPos = new Vector3(0.5f, 0.5f, 0);
+
         Vector3 startPos = parNode.transform.position + plusPos;
         Vector3 endPos = childNode.transform.position + plusPos;
         line = Instantiate(linePrefab, parNode.transform);

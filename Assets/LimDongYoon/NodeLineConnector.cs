@@ -6,6 +6,7 @@ using System.Collections;
 public class NodeLineConnector : MonoBehaviour
 {
     SelStageManager stageMgr;
+    public int levelDepth = 0;
     public List<RectTransform> stageNodes;
     public List<NodeLineConnector> connectors=  new List<NodeLineConnector>();
     public List<LineRenderer> lineRenderers;
@@ -30,7 +31,7 @@ public class NodeLineConnector : MonoBehaviour
         stageMgr = FindObjectOfType<SelStageManager>();
         btn = GetComponent<Button>();
         btn.targetGraphic = GetComponent<RawImage>();
-     //   btn.onClick.AddListener(ConnectLine);
+
         btn.onClick.AddListener(Connect);
 
         for (int i = 0; i < stageNodes.Count; i++) 
@@ -42,17 +43,25 @@ public class NodeLineConnector : MonoBehaviour
             lineRenderers.Add(a);
                
         }
-       
-        if (stageNodes.Count <= 1)
+
+        /*    if (stageNodes.Count <= 1)
+            {
+                Debug.LogWarning("Need at least two nodes to connect!");
+                return;
+            }*/
+
+        //Initialize lineRenderer
+
+        if (stageMgr.isCreateDefalutLine)
         {
-            Debug.LogWarning("Need at least two nodes to connect!");
-            return;
+
+            for (int i = 0; i < stageNodes.Count; i++)
+            {
+                lineRenderers[i].positionCount++;
+                lineRenderers[i].SetPosition(1, stageNodes[i].position + plusPos);
+                Debug.Log(transform.name + " 스테이지 호출");
+            }
         }
-
-        // Initialize lineRenderer
-
-
-        //StartCoroutine(DrawLinesBetweenNodes());
     }
     public void Connect()
     {
@@ -60,7 +69,7 @@ public class NodeLineConnector : MonoBehaviour
     }
     private void ConnectLine()
     {
-
+        
         
         if (numState > stageNodes.Count -1) { Debug.Log("인덱스 범위 넘어섬"); return; }
         lineRenderers[numState].positionCount++;
