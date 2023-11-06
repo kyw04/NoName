@@ -9,6 +9,7 @@ public class Node : MonoBehaviour
     private float moveDistance;
     public Image image;
     public int x, y;
+    public float size = 100f;
     private Node target = null;
 
     private void Start()
@@ -58,8 +59,7 @@ public class Node : MonoBehaviour
         if (moveDistance > maxDistance * 0.5f)
         {
             int[] move = { 0, 1, -1 };
-            const float size = 100f;
-            const float halfSize = size * 0.5f;
+            float halfSize = size * 0.5f;
             
             for (int i = 0; i < 3; i++)
             {
