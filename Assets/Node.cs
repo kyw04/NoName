@@ -128,7 +128,7 @@ public class Node : MonoBehaviour
             return;
 
         Gizmos.color = Color.gray;
-        Gizmos.DrawWireSphere(transform.parent.position, moveDistance);
+        Gizmos.DrawWireSphere(transform.parent.position, size);
         Gizmos.color = Color.green;
         Gizmos.DrawLine(transform.parent.position, transform.position);
 
@@ -140,8 +140,7 @@ public class Node : MonoBehaviour
         }
 
         int[] move = { 0, 1, -1 };
-        const float size = 100f;
-        const float halfSize = size * 0.5f;
+        float halfSize = size * 0.5f;
         Gizmos.color = Color.yellow;
         for (int i = 0; i < 3; i++)
         {
